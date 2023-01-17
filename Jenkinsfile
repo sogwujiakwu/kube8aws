@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-             TF_VAR_AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-             TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
-     }
     stages {
         stage('create s3 bucket') {
             agent {
@@ -16,7 +12,9 @@ pipeline {
                 }
             }
             steps {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                     sh 'aws s3 mb s3://cimonibucket-20221216 --region us-east-1'
+                } 
             }
         }
         stage('validate') {
@@ -30,8 +28,10 @@ pipeline {
                 }
             }
             steps {
+                    withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
+                 }
             }
         }        
         stage('plan') {
@@ -45,8 +45,11 @@ pipeline {
                 }
             }
             steps {
+                    withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform plan -out terraform.plan -input=false'
+                    archiveArtifacts artifacts: 'terraform.plan', fingerprint: true 
+                    }
             }
         }        
         stage('apply') {
@@ -60,9 +63,11 @@ pipeline {
                 }
             }
             steps {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                 input 'Deploy to Production'
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform apply -input=false terraform.plan'
+                }
             }
         }   
  
@@ -77,9 +82,11 @@ pipeline {
                 }
             }
             steps {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                 input 'Destroy!!!'
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform apply -input=false terraform.plan'
+                }
             }
         }           
           stage('delete s3 bucket') {
@@ -93,8 +100,10 @@ pipeline {
                 }
             }
             steps {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                 input 'Delete S3 Bucket!!!'
                     sh 'aws s3 rb s3://cimonibucket-20221216 --force --region us-east-1'
+                }
             }
         }              
     }
