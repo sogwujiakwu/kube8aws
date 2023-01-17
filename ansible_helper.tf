@@ -115,7 +115,7 @@ resource "null_resource" "run_ansible" {
   provisioner "remote-exec" {
     inline = [
       "echo 'starting ansible playbooks...'",
-      "sleep 60 && ansible-playbook -i /home/ubuntu/inventory /home/ubuntu/ansible/play.yml ",
+      "sleep 60 && ansible-playbook -i /home/ubuntu/inventory /home/ubuntu/ansible/play_updated.yml ",
     ] 
   }
 }
