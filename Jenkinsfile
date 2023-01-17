@@ -60,6 +60,7 @@ pipeline {
                 }
             }
             steps {
+                input 'Deploy to Production'
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform apply -input=false terraform.plan'
             }
@@ -76,6 +77,7 @@ pipeline {
                 }
             }
             steps {
+                input 'Destroy!!!'
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform apply -input=false terraform.plan'
             }
@@ -91,6 +93,7 @@ pipeline {
                 }
             }
             steps {
+                input 'Delete S3 Bucket!!!'
                     sh 'aws s3 rb s3://cimonibucket-20221216 --force --region us-east-1'
             }
         }              
