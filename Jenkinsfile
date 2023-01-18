@@ -90,7 +90,7 @@ pipeline {
                 withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                 input 'Destroy!!!'
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
-                    sh 'terraform apply -input=false terraform.plan'
+                    sh 'terraform destroy --auto-approve'
                 }
             }
         }           
