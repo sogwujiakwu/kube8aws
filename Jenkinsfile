@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        S3_BUCKET_NAME = 'terraform-state-bucket-20230119'
+        S3_BUCKET_NAME = 'tfstate-bucket-20230119'
     }
     stages {
         stage('create s3 bucket') {
