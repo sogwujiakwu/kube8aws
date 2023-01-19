@@ -9,7 +9,7 @@ terraform {
     region  = "us-east-1"
     profile = "default"
     key     = "terraformstatefile"
-    bucket  = "$S3_BUCKET_NAME"
+    bucket  = $S3_BUCKET_NAME
   }
 }
 
