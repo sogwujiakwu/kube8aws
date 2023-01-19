@@ -9,7 +9,7 @@ terraform {
     region  = "us-east-1"
     profile = "default"
     key     = "terraformstatefile"
-    bucket  = "cimonibucket-20221216"
+    bucket  = "$S3-BUCKET-NAME"
   }
 }
 
