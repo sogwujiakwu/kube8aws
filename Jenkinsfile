@@ -56,6 +56,9 @@ pipeline {
             }
         }        
         stage('apply') {
+             when {
+                branch 'main'
+            }
             agent {
                 docker {
                     image 'hashicorp/terraform:latest'
