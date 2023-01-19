@@ -14,7 +14,7 @@ pipeline {
             }
             steps {
                 withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
-                    sh 'aws s3 mb s3://cimonibucket-20221216 --region us-east-1'
+                    sh 'aws s3 mb s3://$S3-BUCKET-NAME --region us-east-1'
                 } 
             }
         }
@@ -108,7 +108,7 @@ pipeline {
             steps {
                 withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                 input 'Delete S3 Bucket!!!'
-                    sh 'aws s3 rb s3://cimonibucket-20221216 --force --region us-east-1'
+                    sh 'aws s3 rb s3://$S3-BUCKET-NAME --force --region us-east-1'
                 }
             }
         }              
