@@ -55,3 +55,12 @@ variable "worker_instance_type" {
     type = string
     default = "t3.micro"
 }
+
+/*
+variable "instances_per_subnet" {
+  description = "Number of EC2 instances in each private subnet"
+  type        = number
+  default     = 2
+}
+*/
+
