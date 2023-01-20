@@ -54,15 +54,15 @@ pipeline {
             steps {
                     withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
-                    sh 'terraform plan -out terraform.plan -input=false'
+                    sh 'terraform plan -out terraform.plan -var="AWS_REGION=$REGION" -input=false'
                     archiveArtifacts artifacts: 'terraform.plan', fingerprint: true 
                     }
             }
         }        
         stage('apply') {
-             when {
+         /*    when {
                 branch 'main'
-            }
+            } */
             agent {
                 docker {
                     image 'hashicorp/terraform:latest'
@@ -115,9 +115,9 @@ pipeline {
                 }
             }
             steps {
-                withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                 input 'Delete S3 Bucket!!!'
-                    sh 'aws s3 rb s3://$S3_BUCKET_NAME --force --region $REGION'
+                    sh 'aws s3 rb s3://$S3_BUCKET_NAME --force --region us-east-1'
                 }
             }
         }              
