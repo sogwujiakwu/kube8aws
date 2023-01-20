@@ -45,10 +45,12 @@ resource "aws_instance" "bastion" {
 #Master
 resource "aws_instance" "masters" {
   count         = var.master_node_count
+  #count = var.instances_per_subnet * length(data.terraform_remote_state.vpc.outputs.private_subnet_ids)
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.master_instance_type
   subnet_id = "${element(module.vpc.private_subnets, count.index)}"
-  key_name          =   aws_key_pair.k8_ssh.key_name
+  #subnet_id    = data.terraform_remote_state.vpc.outputs.private_subnet_ids[count.index % length(data.terraform_remote_state.vpc.outputs.private_subnet_ids)]
+  key_name      =   aws_key_pair.k8_ssh.key_name
   security_groups = [aws_security_group.k8_nondes.id, aws_security_group.k8_masters.id]
 
   tags = {
