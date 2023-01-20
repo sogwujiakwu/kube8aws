@@ -17,8 +17,8 @@ pipeline {
                 }
             }
             steps {
-                withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
-                    sh 'aws s3 mb s3://$S3_BUCKET_NAME --region $REGION'
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
+                    sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
                 } 
             }
         }
