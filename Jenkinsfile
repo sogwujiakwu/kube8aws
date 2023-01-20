@@ -2,6 +2,11 @@ pipeline {
     agent any
     environment {
         S3_BUCKET_NAME = 'tfstate-bucket-20230119'
+        if env.BRANCH_NAME == 'dev' {
+            REGION = 'us-west-2'
+        }   else if env.BRANCH_NAME == 'prod' {
+            REGION = 'us-east-1'
+            }
     }
     stages {
         stage('create s3 bucket') {
@@ -16,8 +21,8 @@ pipeline {
                 }
             }
             steps {
-                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
-                    sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
+                    sh 'aws s3 mb s3://$S3_BUCKET_NAME --region $REGION'
                 } 
             }
         }
@@ -33,7 +38,7 @@ pipeline {
                 }
             }
             steps {
-                    withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
+                    withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
                  }
@@ -51,7 +56,7 @@ pipeline {
                 }
             }
             steps {
-                    withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
+                    withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform plan -out terraform.plan -input=false'
                     archiveArtifacts artifacts: 'terraform.plan', fingerprint: true 
@@ -73,7 +78,7 @@ pipeline {
                 }
             }
             steps {
-                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         input 'Deploy to Production'
                           sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
@@ -95,7 +100,7 @@ pipeline {
                 }
             }
             steps {
-                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
                 input 'Destroy!!!'
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform destroy --auto-approve'
@@ -114,9 +119,9 @@ pipeline {
                 }
             }
             steps {
-                withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
+                withAWS(credentials: 'cloud_playgroud_aws_cred', region: '$REGION') {
                 input 'Delete S3 Bucket!!!'
-                    sh 'aws s3 rb s3://$S3_BUCKET_NAME --force --region us-east-1'
+                    sh 'aws s3 rb s3://$S3_BUCKET_NAME --force --region $REGION'
                 }
             }
         }              
