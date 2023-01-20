@@ -2,11 +2,7 @@ pipeline {
     agent any
     environment {
         S3_BUCKET_NAME = 'tfstate-bucket-20230119'
-        if (env.BRANCH_NAME == 'dev') {
-            REGION = 'us-west-2'
-        }   else if (env.BRANCH_NAME == 'prod') {
-            REGION = 'us-east-1'
-            }
+        REGION = getRegionName(env.BRANCH_NAME)
     }
     stages {
         stage('create s3 bucket') {
@@ -127,4 +123,10 @@ pipeline {
         }              
     }
 }     
-        
+def getRegionName(branchName) {
+    if("main".equals(branchName)) {
+        return "us-east-1";
+    } else if ("dev".equals(branchName)) {
+        return "us-west-2";
+    }
+}        
