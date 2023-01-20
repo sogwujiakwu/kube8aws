@@ -3,11 +3,13 @@ variable "AWS_REGION" {
 	default = "us-east-1"
 }
 
+/*
 # If you are using diffrent region (other than us-east-1) please find ubuntu 18.04 ami for that region and change here.
 variable "ami_id" {
     type = string
     default = "ami-0d73480446600f555"
 }
+*/
 /*
 variable "availability_zones" {
   type    = list(string)
