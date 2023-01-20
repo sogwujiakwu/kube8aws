@@ -1,5 +1,3 @@
-
-
 resource "aws_lb" "k8_masters_lb" {
     name        = "k8-masters-lb"
     internal    = true
