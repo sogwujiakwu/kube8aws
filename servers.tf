@@ -1,6 +1,22 @@
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
 #Bastion
 resource "aws_instance" "bastion" {
-  ami           = var.ami_id
+  ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
   subnet_id = module.vpc.public_subnets[0]
   associate_public_ip_address = "true"
@@ -29,7 +45,7 @@ resource "aws_instance" "bastion" {
 #Master
 resource "aws_instance" "masters" {
   count         = var.master_node_count
-  ami           = var.ami_id
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.master_instance_type
   subnet_id = "${element(module.vpc.private_subnets, count.index)}"
   key_name          =   aws_key_pair.k8_ssh.key_name
@@ -43,7 +59,7 @@ resource "aws_instance" "masters" {
 #Worker
 resource "aws_instance" "workers" {
   count         = var.worker_node_count
-  ami           = var.ami_id
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.worker_instance_type
   subnet_id = "${element(module.vpc.private_subnets, count.index)}"
   key_name          =   aws_key_pair.k8_ssh.key_name
