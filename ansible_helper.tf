@@ -15,6 +15,11 @@ resource "local_file" "ansible_inventory" {
 
 # wating for bastion server user data init.
 # TODO: Need to switch to signaling based solution instead of waiting. 
+/*while ! systemctl status ansible; do
+    echo "Ansbile is not running. Sleep for 5 seconds"
+    sleep 5
+done
+*/
 resource "time_sleep" "wait_for_bastion_init" {
   depends_on = [aws_instance.bastion]
 
