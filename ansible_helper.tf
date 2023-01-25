@@ -22,7 +22,12 @@ resource "null_resource" "wait_for_bastion_init" {
   triggers = {
     always_run = timestamp()
   }
-
+	
+  provisioner "file" {
+    source      = "${path.root}/wait_for_bastion_init.sh"
+    destination = "/tmp/wait_for_bastion_init.sh"
+  }
+	
   connection {
     type        = "ssh"
     host        = aws_instance.bastion.public_ip
@@ -34,8 +39,8 @@ resource "null_resource" "wait_for_bastion_init" {
 
   provisioner "remote-exec" {
     inline = [
-	    "chmod +x ${path.root}/wait_for_bastion_init.sh",
-	    "${path.root}/wait_for_bastion_init.sh"
+	    "chmod +x /tmp/wait_for_bastion_init.sh",
+	    "/tmp/wait_for_bastion_init.sh"
     ]
   }
 }
