@@ -36,7 +36,7 @@ resource "null_resource" "wait_for_bastion_init" {
     inline = [
       <<-EOF 
       #!/bin/bash
-      while ! systemctl status ansible;
+      while ! systemctl status ansible
 	  do
 	    echo "Ansbile is not running. Sleep for 5 seconds"
 	    sleep 5
