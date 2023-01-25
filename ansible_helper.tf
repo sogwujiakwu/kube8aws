@@ -34,7 +34,7 @@ resource "null_resource" "wait_for_bastion_init" {
 
   provisioner "remote-exec" {
     inline = [ 
-	 "while ! systemctl status ansible \
+	 while ! systemctl status ansible \
             do echo "Ansbile is not running. Sleep for 5 seconds" \
 	       sleep 5 \
 	    done
