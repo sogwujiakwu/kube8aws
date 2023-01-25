@@ -18,11 +18,11 @@ resource "local_file" "ansible_inventory" {
 
 resource "null_resource" "wait_for_bastion_init" {
   depends_on = [aws_instance.bastion]
-	
+/*	
   triggers = {
     always_run = timestamp()
   }
-	
+*/	
   provisioner "file" {
     source      = "${path.root}/wait_for_bastion_init.sh"
     destination = "/tmp/wait_for_bastion_init.sh"
