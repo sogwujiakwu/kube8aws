@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         S3_BUCKET_NAME = 'tfstate-bucket-20230119'
-        TF_VAR_AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-        TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
+        # TF_VAR_AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
+        # TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
         AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')        
     }
@@ -42,7 +42,7 @@ pipeline {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
                  }*/
-                    sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
+                    sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'                
             }
         }        
@@ -63,7 +63,7 @@ pipeline {
                     sh 'terraform plan -out terraform.plan -input=false'
                     archiveArtifacts artifacts: 'terraform.plan', fingerprint: true 
                     }*/
-                    sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
+                    sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform plan -out terraform.plan -input=false'
                     archiveArtifacts artifacts: 'terraform.plan', fingerprint: true                 
             }
@@ -92,7 +92,7 @@ pipeline {
                 }*/
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         input 'Deploy to Production'
-                          sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
+                          sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                           sh 'terraform apply -input=false terraform.plan'
                     }                
             }
@@ -115,7 +115,8 @@ pipeline {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform destroy --auto-approve'
                 }*/
-                    sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
+                    input 'Destroy!!!'
+                    sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform destroy --auto-approve'                
             }
         }           
