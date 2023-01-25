@@ -114,7 +114,7 @@ pipeline {
                     sh 'terraform destroy --auto-approve'
                 }*/
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
-                    sh 'terraform destroy --auto-approve                
+                    sh 'terraform destroy --auto-approve'                
             }
         }           
           stage('delete s3 bucket') {
