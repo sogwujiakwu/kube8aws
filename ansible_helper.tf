@@ -33,7 +33,10 @@ resource "null_resource" "wait_for_bastion_init" {
   }
 
   provisioner "remote-exec" {
-    script = file(wait_for_bastion_init.sh)
+    inline = [
+	    "chmod +x wait_for_bastion_init.sh",
+	    "./wait_for_bastion_init.sh"
+    ]
   }
 }
 
