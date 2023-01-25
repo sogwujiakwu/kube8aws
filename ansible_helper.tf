@@ -15,7 +15,7 @@ resource "local_file" "ansible_inventory" {
 
 # wating for bastion server user data init.
 # TODO: Need to switch to signaling based solution instead of waiting. 
-/*
+
 resource "null_resource" "wait_for_bastion_init" {
   depends_on = [aws_instance.bastion]
 	
@@ -44,8 +44,8 @@ resource "null_resource" "wait_for_bastion_init" {
     ]
   }
 }
-*/
-		
+
+/*		
 resource "time_sleep" "wait_for_bastion_init" {
   depends_on = [aws_instance.bastion]
 
@@ -55,13 +55,13 @@ resource "time_sleep" "wait_for_bastion_init" {
     "always_run" = timestamp()
   }
 }
-
+*/
 
 resource "null_resource" "provisioner" {
   depends_on    = [
     local_file.ansible_inventory,
-    time_sleep.wait_for_bastion_init,
-    #null_resource.wait_for_bastion_init,
+    #time_sleep.wait_for_bastion_init,
+    null_resource.wait_for_bastion_init,
     aws_instance.bastion
     ]
 
@@ -95,8 +95,8 @@ resource "local_file" "ansible_vars_file" {
 resource "null_resource" "copy_ansible_playbooks" {
   depends_on    = [
     null_resource.provisioner,
-    time_sleep.wait_for_bastion_init,
-    #null_resource.wait_for_bastion_init,
+    #time_sleep.wait_for_bastion_init,
+    null_resource.wait_for_bastion_init,
     aws_instance.bastion,
     local_file.ansible_vars_file
     ]
@@ -129,8 +129,8 @@ resource "null_resource" "run_ansible" {
     aws_instance.workers,
     module.vpc,
     aws_instance.bastion,
-    time_sleep.wait_for_bastion_init,
-    #null_resource.wait_for_bastion_init,
+    #time_sleep.wait_for_bastion_init,
+    null_resource.wait_for_bastion_init,
   ]
 
   triggers = {
