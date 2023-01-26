@@ -29,7 +29,11 @@ pipeline {
         }
         stage('replace S3_BUCKET_NAME in provider.tf ') {
             steps {
-                sed '-i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
+                sh """#!/bin/bash
+                   cat providers.tf | grep S3_BUCKET_NAME
+                   sed -i 's|S3_BUCKET_NAME: .*|version: "${S3_BUCKET_NAME}"|' providers.tf
+                   cat app.yml | grep S3_BUCKET_NAME
+                   """
             }
         }        
         stage('validate') {
