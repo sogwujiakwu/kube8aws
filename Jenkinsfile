@@ -24,6 +24,7 @@ pipeline {
                     sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
                 } */
                 sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
+                sed '-i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
             }
         }
         stage('validate') {
