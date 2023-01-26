@@ -27,6 +27,21 @@ pipeline {
                 
             }
         }
+        stage('replace S3_BUCKET_NAME in provider.tf ') {
+            agent {
+                docker {
+                    image 'ubuntu:latest'
+                    // Run the container on the node specified at the
+                    // top-level of the Pipeline, in the same workspace,
+                    // rather than on a new node entirely:
+                    reuseNode true
+                    args '--entrypoint='
+                }
+            }
+            steps {
+                sed '-i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
+            }
+        }        
         stage('validate') {
             agent {
                 docker {
@@ -43,7 +58,6 @@ pipeline {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
                  }*/
-                    sed '-i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'                
             }
