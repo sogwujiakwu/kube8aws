@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        S3_BUCKET_NAME = 'tfstate-bucket-20230125'
+        // S3_BUCKET_NAME = '<bucket-name>'
         // TF_VAR_AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
         // TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
         AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
