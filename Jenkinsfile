@@ -26,17 +26,8 @@ pipeline {
                 sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
                 
             }
-        }
-        stage('replace S3_BUCKET_NAME in provider.tf ') {
-            steps {
-                sh """#!/bin/bash
-                   cat providers.tf | grep S3_BUCKET_NAME
-                   sed -i 's|S3_BUCKET_NAME: .*|S3_BUCKET_NAME: "${S3_BUCKET_NAME}"|' providers.tf
-                   cat providers.tf | grep S3_BUCKET_NAME
-                   """
-            }
-        }        
-        stage('validate') {
+        }      
+        stage('initialize and validate') {
             agent {
                 docker {
                     image 'hashicorp/terraform:latest'
@@ -52,6 +43,11 @@ pipeline {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
                  }*/
+                    sh """#!/bin/bash
+                       cat providers.tf | grep S3_BUCKET_NAME
+                       sed -i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf
+                       cat providers.tf | grep S3_BUCKET_NAME
+                       """                    
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'                
             }
