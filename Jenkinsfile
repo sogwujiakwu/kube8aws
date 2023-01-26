@@ -31,7 +31,7 @@ pipeline {
             steps {
                 sh """#!/bin/bash
                    cat providers.tf | grep S3_BUCKET_NAME
-                   sed -i 's|S3_BUCKET_NAME: .*|version: "${S3_BUCKET_NAME}"|' providers.tf
+                   sed -i 's|S3_BUCKET_NAME: .*|S3_BUCKET_NAME: "${S3_BUCKET_NAME}"|' providers.tf
                    cat providers.tf | grep S3_BUCKET_NAME
                    """
             }
