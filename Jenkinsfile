@@ -24,7 +24,7 @@ pipeline {
                     sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
                 } */
                 sh 'aws s3 mb s3://$S3_BUCKET_NAME --region us-east-1'
-                sed '-i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
+                
             }
         }
         stage('validate') {
@@ -43,6 +43,7 @@ pipeline {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
                  }*/
+                    sed -i '"s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'                
             }
