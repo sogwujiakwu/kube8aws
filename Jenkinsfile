@@ -32,7 +32,7 @@ pipeline {
                 sh """#!/bin/bash
                    cat providers.tf | grep S3_BUCKET_NAME
                    sed -i 's|S3_BUCKET_NAME: .*|version: "${S3_BUCKET_NAME}"|' providers.tf
-                   cat app.yml | grep S3_BUCKET_NAME
+                   cat providers.tf | grep S3_BUCKET_NAME
                    """
             }
         }        
