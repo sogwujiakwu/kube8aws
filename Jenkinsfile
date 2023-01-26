@@ -42,12 +42,12 @@ pipeline {
                     /*withAWS(credentials: 'cloud_playgroud_aws_cred', region: 'us-east-1') {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
-                 }*/
+                 }
                     sh """#!/bin/bash
                        cat providers.tf | grep S3_BUCKET_NAME
                        sed -i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf
                        cat providers.tf | grep S3_BUCKET_NAME
-                       """                    
+                       """  */                  
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'                
             }
