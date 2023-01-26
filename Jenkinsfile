@@ -43,7 +43,7 @@ pipeline {
                     sh 'terraform init -input=false -backend-config="access_key=$TF_VAR_AWS_ACCESS_KEY_ID" -backend-config="secret_key=$TF_VAR_AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'
                  }*/
-                    sed -i '"s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
+                    sed '-i "s@S3_BUCKET_NAME@$S3_BUCKET_NAME@g" providers.tf'
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
                     sh 'terraform validate'                
             }
