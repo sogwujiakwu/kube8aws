@@ -88,7 +88,7 @@ pipeline {
                     archiveArtifacts artifacts: 'terraform.plan', fingerprint: true 
                     }*/
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
-                    sh 'terraform plan -out terraform.plan -input=false'
+                    sh 'terraform plan -out terraform.plan -input=false -no-color'
                     archiveArtifacts artifacts: 'terraform.plan', fingerprint: true                 
             }
         }        
@@ -117,7 +117,7 @@ pipeline {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         input 'Deploy to Production'
                           sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
-                          sh 'terraform apply -input=false terraform.plan'
+                          sh 'terraform apply -input=false terraform.plan -no-color'
                     }                
             }
         }   
@@ -141,7 +141,7 @@ pipeline {
                 }*/
                     input 'Destroy!!!'
                     sh 'terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY"'
-                    sh 'terraform destroy --auto-approve'                
+                    sh 'terraform destroy --auto-approve -no-color'                
             }
         }           
           stage('delete s3 bucket') {
