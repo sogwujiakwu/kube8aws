@@ -9,7 +9,22 @@ pipeline {
     }
     /*triggers {
         pollSCM '*/5 * * * *'
-    } */   
+    } 
+  options {
+    skipDefaultCheckout(true)
+  }
+  stages{
+    stage('clean workspace') {
+      steps {
+        cleanWs()
+      }
+    }
+    stage('checkout') {
+      steps {
+        checkout scm
+      }
+    }
+*/       
     stages {
         stage('create s3 bucket') {
             agent {
@@ -150,5 +165,10 @@ pipeline {
             }
         }              
     }
+  post {
+    always {
+      cleanWs()
+    }
+  }      
 }     
         
