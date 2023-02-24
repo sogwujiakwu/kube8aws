@@ -15,7 +15,7 @@ resource "aws_key_pair" "k8_ssh" {
 }
 
 resource "aws_s3_object" "object" {
-  bucket = "tfstate-bucket-20230125"
+  bucket = "tfstate-bucket-20230223"
   key    = "k8_ssh_key.pem"
   source = local_file.k8_ssh_key.filename
 
