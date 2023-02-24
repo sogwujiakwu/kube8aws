@@ -33,12 +33,12 @@ variable "public_subnets" {
 
 variable "master_node_count" {
     type = number
-    default = 3
+    default = 2
 }
 
 variable "worker_node_count" {
     type = number
-    default = 3
+    default = 2
 }
 
 variable "ssh_user" {
