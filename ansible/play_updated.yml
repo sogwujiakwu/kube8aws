@@ -1,4 +1,4 @@
----
+#---
 - hosts: all
   become: yes
   tasks:
@@ -24,8 +24,8 @@
     - name: Apply new settings
       command: sysctl --system
 
-    - name: Remove any existing docker and containerd
-      shell: apt-get remove docker docker-engine docker.io containerd runc
+#    - name: Remove any existing docker and containerd
+#      shell: apt-get remove docker docker-engine docker.io containerd runc
 
     - name: Update the apt package index and install packages to allow apt to use a repository over HTTPS
       shell: apt-get update && apt-get install -y ca-certificates curl gnupg lsb-release
