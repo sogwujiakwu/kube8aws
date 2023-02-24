@@ -52,7 +52,7 @@
           timeout: 20
 
     - name: Install Latest version of Docker Engine, containerd, and Docker Compose
-      shell: apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+      shell: apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
     - name: Generate default containerd configuration and save to the newly created default file 
       shell: containerd config default | tee /etc/containerd/config.toml
