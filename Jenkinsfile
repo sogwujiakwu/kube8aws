@@ -2,6 +2,7 @@ pipeline {
     agent any
     options {
         timestamps()
+        ansiColor('xterm')
     }
     environment {
         // S3_BUCKET_NAME = '<bucket-name>'
