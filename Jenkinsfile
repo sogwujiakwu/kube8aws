@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+        timestamp()
+    }
     environment {
         // S3_BUCKET_NAME = '<bucket-name>'
         // TF_VAR_AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
