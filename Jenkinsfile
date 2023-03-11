@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options {
-        timestamp()
+        timestamps()
     }
     environment {
         // S3_BUCKET_NAME = '<bucket-name>'
